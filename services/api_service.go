@@ -62,6 +62,16 @@ func (svc *APIService) UploadTorrent(input models.APIInputParameter) (models.API
 	}
 	mediainfo.Write([]byte(input.Mediainfo))
 
+	if len(input.Flags) > 0 {
+		flags, err := w.CreateFormField("flags[]")
+		if err != nil {
+			log.Println("error creating flags[] field:", err)
+			return apiUploadResponse, err
+		}
+		flagStr := strings.Join(input.Flags, ",")
+		flags.Write([]byte(flagStr))
+	}
+
 	fw, err := w.CreateFormFile("file_input", input.FileInput)
 	if err != nil {
 		log.Println("error creating form file:", err)
@@ -164,6 +174,8 @@ func (svc *APIService) DownloadTorrent(url, filePath string) error {
 		log.Println("error .writing torrent file:", err)
 		return err
 	}
+
+	log.Println(".torrent file downloaded successfully")
 
 	return nil
 }

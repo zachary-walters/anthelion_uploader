@@ -14,3 +14,10 @@ type ShellCommandArg struct {
 	Flag string `json:"flag"`
 	Arg  string `json:"arg"`
 }
+
+type MediainfoSections struct {
+	General string   `json:"general"`
+	Video   string   `json:"video"`
+	Audio   []string `json:"audio"`
+	Text    []string `json:"text"`
+}

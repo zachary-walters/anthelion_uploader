@@ -131,7 +131,7 @@ func (svc *ShellCommandService) findBinaryPath(binaryName string) (string, error
 	})
 	if err != nil {
 		log.Printf("error finding binary path for %s", binaryName)
-		log.Printf(err.Error())
+		log.Println(err.Error())
 	}
 
 	return path, err

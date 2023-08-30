@@ -53,19 +53,23 @@ func main() {
 
 	shellCommandService := services.NewShellCommandService()
 
-	// CREATE .TORRENT FILE
-	torrentPath, err := shellCommandService.MakeTorrentFile(filePath)
-	if err != nil {
-		return
-	}
-	log.Println("Creating .torrent file DONE.")
-
 	// GENERATE MEDIAINFO
 	mediainfo, err := shellCommandService.GetMediaInfo(filePath)
 	if err != nil {
 		return
 	}
 	log.Println("Generating Mediainfo DONE.")
+
+	mediainfoParsingService := services.NewMediainfoParsingService()
+
+	flags := mediainfoParsingService.GetFlags(mediainfo)
+
+	// CREATE .TORRENT FILE
+	torrentPath, err := shellCommandService.MakeTorrentFile(filePath)
+	if err != nil {
+		return
+	}
+	log.Println("Creating .torrent file DONE.")
 
 	// UPLOAD TORRENT
 	log.Println("Uploading Torrent ...")
@@ -75,6 +79,7 @@ func main() {
 		TMDBID:    tmdbID,
 		Mediainfo: mediainfo,
 		FileInput: torrentPath,
+		Flags:     flags,
 	}
 
 	apiService := services.NewAPIService()
